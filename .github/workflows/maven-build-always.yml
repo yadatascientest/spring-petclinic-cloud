@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build image with spring
-        run: mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX} --file pom.xml
+        run: mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX}
       - name: Push docker images
-        run: ../../scripts/pushImages.sh
+        run: ./scripts/pushImages.sh
 
 
