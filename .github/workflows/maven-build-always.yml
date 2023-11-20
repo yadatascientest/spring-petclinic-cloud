@@ -16,8 +16,8 @@ jobs:
   generation-images-docker:
     runs-on: ubuntu-latest
     steps:
-    - name: current directory with bash
-      run: pwd
+    - name: current directory
+      run: pwd && ls -a
       shell: bash
     - name: print some default env variables
       run: |
