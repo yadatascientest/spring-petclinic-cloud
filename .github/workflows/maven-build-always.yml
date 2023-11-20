@@ -16,8 +16,6 @@ jobs:
   generation-images-docker:
     runs-on: ubuntu-latest
     steps:
-    - name: current directory with powershell
-      run: Get-Location
     - name: current directory with bash
       run: pwd
       shell: bash
