@@ -10,5 +10,5 @@ jobs:
         echo "HOME: ${HOME}"
         echo "REPOSITORY_PREFIX: ${REPOSITORY_PREFIX}"
         echo "REPOSITORY_PREFIX1: ${{ secrets.REPOSITORY_PREFIX }}"
-        echo "REPOSITORY_PREFIX2: ${{ $env.REPOSITORY_PREFIX }}"
+        echo "REPOSITORY_PREFIX2: ${{ env.REPOSITORY_PREFIX }}"
       shell: bash
