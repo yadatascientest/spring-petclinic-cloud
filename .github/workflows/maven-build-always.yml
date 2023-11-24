@@ -20,4 +20,6 @@ jobs:
       shell: bash
     - name: Generate docker images
       run : mvn spring-boot:build-image --file pom.xml -X -Pk8s -DREPOSITORY_PREFIX=adjouder
+    - name: push docker images
+      run : ./scripts/pushImages.sh
 
