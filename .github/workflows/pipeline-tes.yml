@@ -1,0 +1,14 @@
+name: Petclinic CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: print some default env variables
+      run: |
+        echo "HOME: ${HOME}"
+        echo "REPOSITORY_PREFIX: ${REPOSITORY_PREFIX}"
+        echo "REPOSITORY_PREFIX1: ${{ secrets.REPOSITORY_PREFIX }}"
+        echo "REPOSITORY_PREFIX: ${{ secrets.DOCKER_HUB_USERNAME }}"
+      shell: bash
