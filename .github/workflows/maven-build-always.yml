@@ -6,6 +6,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: push docker images
+      run: ./scripts/hellobash.sh
+    - name: push docker images
       run : ./scripts/pushImages.sh
-      shell:  bash
 

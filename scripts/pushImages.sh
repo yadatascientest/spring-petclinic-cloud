@@ -1,4 +1,8 @@
 #!/bin/bash
+REPOSITORY_PREFIX=adjouder
+echo "début du déploeiement ......."
+echo ${REPOSITORY_PREFIX}"/spring-petclinic-cloud-api-gateway:latest"
+
 docker push ${REPOSITORY_PREFIX}/spring-petclinic-cloud-api-gateway:latest
 docker push ${REPOSITORY_PREFIX}/spring-petclinic-cloud-visits-service:latest
 docker push ${REPOSITORY_PREFIX}/spring-petclinic-cloud-vets-service:latest
