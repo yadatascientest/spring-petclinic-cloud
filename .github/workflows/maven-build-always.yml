@@ -13,15 +13,12 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-  generation-images-docker:
-    runs-on: ubuntu-latest
-    steps:
-    - name: current directory
-      run: pwd && ls ${GITHUB_WORKSPACE}
-      shell: bash
+    - name: Generate docker images
+      run : mvn spring-boot:build-image -X -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX}
     - name: print some default env variables
       run: |
           echo "HOME: ${HOME}"
+          echo "GITHUB_WORKFLOW: ${GITHUB_WORKFLOW}"
           echo "GITHUB_WORKFLOW: ${GITHUB_WORKFLOW}"
           echo "GITHUB_ACTION: ${GITHUB_ACTION}"
           echo "GITHUB_ACTIONS: ${GITHUB_ACTIONS}"
@@ -29,12 +26,5 @@ jobs:
           echo "GITHUB_REPOSITORY: ${GITHUB_REPOSITORY}"
           echo "GITHUB_EVENT_NAME: ${GITHUB_EVENT_NAME}"
           echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
-          echo "DREPOSITORY_PREFIX: ${REPOSITORY_PREFIX}"
+          echo "REPOSITORY_PREFIX: ${REPOSITORY_PREFIX}"
       shell: bash
-    - name: Build image with spring
-     #before-script: - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry-gitlab.talanlabs.com
-      run: mvn spring-boot:build-image #-Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX}
-    - name: Push docker images
-      run: ./scripts/pushImages.sh
-
-
