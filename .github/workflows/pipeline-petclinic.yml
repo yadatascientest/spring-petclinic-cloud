@@ -19,6 +19,6 @@ jobs:
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        password: dckr_pat_fyS9HpLMkVqYuj9BPUEWmDRkORs
     - name: push docker images
       run : ./scripts/pushImages.sh
