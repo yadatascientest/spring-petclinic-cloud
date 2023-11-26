@@ -21,9 +21,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Update kube config
-        run: aws eks update-kubeconfig --name spring-petclinic
-
       - name: Print resources
-        run: kubectl get all --name spring-petclinic
+        run: kubectl get all
 
