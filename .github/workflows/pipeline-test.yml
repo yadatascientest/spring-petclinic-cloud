@@ -21,6 +21,9 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Deploy to EKS
+        run : ./scripts/deployToKubernetes.sh
+
       - name: Print resources
-        run: kubectl get all
+        run: kubectl get all -n spring-petclinic
 
