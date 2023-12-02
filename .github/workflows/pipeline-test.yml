@@ -21,6 +21,15 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Print resources
-        run: kubectl get all -n spring-petclinic
+      - name: récupérer la config kube kubectl
+        run: |
+          echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
+
+      - name: Deploy to Cluster
+        env:
+          REPOSITORY_PREFIX: adjouder
+        run: |
+         export REPOSITORY_PREFIX=${{ env.REPOSITORY_PREFIX }}
+         export KUBECONFIG=kubeconfig.yaml
+         kubectl get all -n spring-petclinic
 
