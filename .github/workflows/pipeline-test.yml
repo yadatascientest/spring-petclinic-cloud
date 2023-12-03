@@ -35,4 +35,5 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: |
+            apply -f ./k8s/init-namespace/01-namespace.yaml
             apply -f ./k8s/
