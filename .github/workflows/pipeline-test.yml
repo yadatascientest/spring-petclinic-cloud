@@ -22,7 +22,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Update kube config
-        run: aws eks update-kubeconfig --name petclinic_cluster
+        #run: aws eks update-kubeconfig --name petclinic_cluster
         run: cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX}'"#${REPOSITORY_PREFIX}#g" | > deploy.yaml
 
       - name: verify deployment
