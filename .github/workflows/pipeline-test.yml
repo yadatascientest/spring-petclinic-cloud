@@ -5,11 +5,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        #- name: Install kubectl
-       # uses: azure/setup-kubectl@v2.0
-       # with:
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v2.0
+        with:
         #  version: 'latest' #'v1.24.0' # default is latest stable
-        #id: install
+        id: install
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -27,6 +28,7 @@ jobs:
         run: |
           pwd & ls 
           cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX}'"#${REPOSITORY_PREFIX}#g" | > deploy.yaml
+          car deploy.yaml
 
       - name: verify cluster
         uses: kodermax/kubectl-aws-eks@main
@@ -34,4 +36,4 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: |
-            apply -f ./k8s
+            apply -f ./k8s/
