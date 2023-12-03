@@ -36,12 +36,3 @@ jobs:
         with:
           args: |
             apply -f ./k8s/
-
-      - name: Print Petclinic services
-        uses: kodermax/kubectl-aws-eks@main
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        with:
-          args: |
-            apply -f ./k8s/
-            get all -n spring-petclinic
