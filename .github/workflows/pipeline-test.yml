@@ -28,7 +28,7 @@ jobs:
         run: |
           pwd & ls 
           cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX}'"#${REPOSITORY_PREFIX}#g" | > deploy.yaml
-          car deploy.yaml
+          cat deploy.yaml
 
       - name: verify cluster
         uses: kodermax/kubectl-aws-eks@main
