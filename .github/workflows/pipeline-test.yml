@@ -24,15 +24,9 @@ jobs:
       - name: Update kube config
         run: aws eks update-kubeconfig --name petclinic_cluster
 
-      - name: récupérer la config kube kubectl
-        run: |
-          echo ${{ secrets.KUBECONFIG }} | base64 --decode > kubeconfig.yaml
-
-      - name: Deploy to Cluster
+      - name: verify deployment
+        uses: kodermax/kubectl-aws-eks@main
         env:
-          REPOSITORY_PREFIX: adjouder
-        run: |
-         export REPOSITORY_PREFIX=${{ env.REPOSITORY_PREFIX }}
-         export KUBECONFIG=kubeconfig.yaml
-         kubectl get all -n spring-petclinic
-
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: rollout status deployment/api-gateway
