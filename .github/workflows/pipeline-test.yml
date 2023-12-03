@@ -31,8 +31,8 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: |
-            get all -n spring-petclinic
+            apply -f deploy.yaml
 
       - name: Deploy to EKS
         run : |
-          pwd & ls
+          pwd & cat deploy.yaml
