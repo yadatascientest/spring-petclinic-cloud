@@ -29,4 +29,4 @@ jobs:
         #uses: kodermax/kubectl-aws-eks@main
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        run: ./scripts/deployToKubernetes.sh
+        run: scripts/deployToKubernetes.sh
