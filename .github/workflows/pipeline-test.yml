@@ -26,7 +26,9 @@ jobs:
         run: cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX}'"#${REPOSITORY_PREFIX}#g" | > deploy.yaml
 
       - name: verify deployment
-        #uses: kodermax/kubectl-aws-eks@main
+        uses: kodermax/kubectl-aws-eks@main
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        run: scripts/deployToKubernetes.sh
+        with:
+          args: |
+            apply -f k8s/
