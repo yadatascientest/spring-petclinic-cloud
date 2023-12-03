@@ -1,0 +1,62 @@
+name: AWS-EKS Deploying
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v2.0
+        with:
+         version: 'latest' #'v1.24.0' # default is latest stable
+         id: install
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Update kube config
+        #run: aws eks update-kubeconfig --name petclinic_cluster
+        run: |
+          pwd & ls 
+          cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX}'"#${REPOSITORY_PREFIX}#g" | > deploy.yaml
+
+      - name: Initialization of namespace EKS
+        uses: kodermax/kubectl-aws-eks@main
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: |
+            apply -f k8s/init-namespace/
+      # il faut le faire uen seule fois pet-être pas dans un pipline ou alors vérifier l'existance avant
+        #- name: Creation des secrets Amazon EKS
+        # uses: kodermax/kubectl-aws-eks@main
+          #env:
+          #KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+          #with:
+            #args: |
+          #create secret generic wavefront -n spring-petclinic --from-literal=wavefront-url=https://wavefront.surf --from-literal=wavefront-api-token=7380ef8d-a2ce-40a7-85b8-70d9d3fab32d
+
+      - name: Initialization of deployment Amazon EKS
+        uses: kodermax/kubectl-aws-eks@main
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: |
+            apply -f k8s/
+
+      - name: Initialization of services Amazon EKS
+        uses: kodermax/kubectl-aws-eks@main
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: |
+            apply -f k8s/init-services

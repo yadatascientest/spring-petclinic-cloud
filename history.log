@@ -1,0 +1,69 @@
+
+
+
+
+
+
+touch hpa.yaml
+ 1127   1485  aws --version
+ 1486  curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+ 1487  sudo installer -pkg ./AWSCLIV2.pkg -target /
+
+ 1490  aws --version
+ 1491  aws sts get-caller-identity
+ 1492  \naws eks register-cluster \\n   --name cluster_test \\n   --connector-config arn:aws:eks:eu-west-3:276555828362:cluster/cluster_test \\n   --region eu-west-3
+ 1493  aws configure
+ 1494  aws sts get-caller-identity
+ 1495  aws eks --region eu-west-3 update-kubeconfig --name cluster_test\n\n\n\n\n\n
+ 1496  aws configure
+ 1497  aws sts get-caller-identity
+ 1498  aws eks --region eu-west-3 update-kubeconfig --name cluster_test
+
+ 1528  export REPOSITORY_PREFIX=adjouder
+ 1537  echo $REPOSITORY_PREFIX
+
+ 1542  scripts/pushImages.sh
+ 1543  mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX} && ./scripts/pushImages.sh
+
+ 1592  ls /usr/local/opt/openjdk@11/libexec/openjdk.jdk
+ 1593  /usr/libexec/java_home -V
+ 1594  /usr/libexec/java_home -xml
+ 1595  export JAVA_HOME="`/usr/libexec/java_home -v '11*'`"
+ 1596  java --version
+ 1597  export JAVA_HOME="`/usr/libexec/java_home -v '11'`"
+
+ 1609  cd /Users/djouder/workspaces/spring-petclinic-cloud
+
+ 1636  export REPOSITORY_PREFIX=adjouder
+ 1637  mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX} && ./scripts/pushImages.sh
+
+ 1662  helm repo add bitnami https://charts.bitnami.com/bitnami
+
+ 1739  eksctl get arn:aws:iam::276555828362:role/eksrole_test --cluster cluster_test --region=eu-west-3
+ 1740  eksctl get iamidentitymapping --cluster my-cluster --region=eu-west-3\n
+ 1741  eksctl get iamidentitymapping --cluster cluster_test --region=eu-west-3
+ 1742  eksctl create iamidentitymapping --cluster cluster_test --region=eu-west-3 \\n    --arn arn:aws:iam::276555828362:role/eksrole_test --username adjouder --group system:bootstrappers,system:nodes \\n    --no-duplicate-arns
+ 1743  eksctl get iamidentitymapping --cluster cluster_test --region=eu-west-3
+ 1744  kubectl describe configmap -n kube-system aws-auth\n
+ 1745  curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/cloudformation/2020-10-29/aws-auth-cm.yaml\n
+
+ 1763* aws sts get-caller-identity
+ 1764* aws eks --region eu-west-3 update-kubeconfig --name cluster_test
+ 1765* aws sts get-caller-identity
+ 1766* aws configure
+
+ 1831  helm repo add bitnami https://charts.bitnami.com/bitnami
+ 1832  helm repo update
+
+ 1849* kubectl delete namespace spring-petclinic
+ 1850  mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX} && ./scripts/pushImages.sh
+ 1851* mvn spring-boot:build-image -Pk8s -DREPOSITORY_PREFIX=${REPOSITORY_PREFIX}
+ 1852* ./scripts/pushImages.sh
+
+ 1854* kubectl apply -f k8s/init-namespace/
+ 1855* kubectl create secret generic wavefront -n spring-petclinic --from-literal=wavefront-url=https://wavefront.surf --from-literal=wavefront-api-token=7380ef8d-a2ce-40a7-85b8-70d9d3fab32d
+
+ 1861* helm install vets-db-mysql bitnami/mysql --namespace spring-petclinic --version 9.14.3 --set auth.database=service_instance_db
+ 1862* helm install visits-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.3 --set auth.database=service_instance_db\n
+ 1863* helm install customers-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.3 --set auth.database=service_instance_db\n
+ 1864* ./scripts/deployToKubernetes.sh\n
