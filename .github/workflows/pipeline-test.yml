@@ -34,8 +34,4 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: |
-            apply -f deploy.yaml
-
-      - name: Deploy to EKS
-        run : |
-          pwd & cat deploy.yaml
+            apply -f ./k8s
