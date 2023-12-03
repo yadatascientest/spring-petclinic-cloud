@@ -23,6 +23,7 @@ jobs:
 
       - name: Update kube config
         run: aws eks update-kubeconfig --name petclinic_cluster
+        run: cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX}'"#${REPOSITORY_PREFIX}#g" | > deploy.yaml
 
       - name: verify deployment
         uses: kodermax/kubectl-aws-eks@main
@@ -30,4 +31,5 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: |
+            apply -f deploy.yaml
             get all -n spring-petclinic
