@@ -43,21 +43,5 @@ jobs:
           eks_cluster: petclinic_cluster
           command: |-
             helm install vets-db-mysql bitnami/mysql --namespace spring-petclinic --version 9.14.3 --set auth.database=service_instance_db
-            helm install visits-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.3 --set auth.database=service_instance_db\n
-            helm install customers-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.3 --set auth.database=service_instance_db\n
-
-  - name: Initialization of deployment Amazon EKS
-        uses: kodermax/kubectl-aws-eks@main
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        with:
-          args: |
-            apply -f k8s/
-
-      - name: Initialization of services Amazon EKS
-        uses: kodermax/kubectl-aws-eks@main
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        with:
-          args: |
-            apply -f k8s/init-services
+            helm install visits-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.3 --set auth.database=service_instance_db
+            helm install customers-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.3 --set auth.database=service_instance_db
