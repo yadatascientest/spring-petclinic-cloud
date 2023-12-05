@@ -36,16 +36,17 @@ jobs:
         with:
           args: |
             apply -f k8s/init-namespace/
-      # il faut le faire uen seule fois pet-être pas dans un pipline ou alors vérifier l'existance avant
-        #- name: Creation des secrets Amazon EKS
-        # uses: kodermax/kubectl-aws-eks@main
-          #env:
-          #KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-          #with:
-            #args: |
-          #create secret generic wavefront -n spring-petclinic --from-literal=wavefront-url=https://wavefront.surf --from-literal=wavefront-api-token=7380ef8d-a2ce-40a7-85b8-70d9d3fab32d
 
-      - name: Initialization of deployment Amazon EKS
+      - name: helm database install
+        uses: tensor-hq/eksctl-helm-action@master
+        with:
+          eks_cluster: petclinic_cluster
+          command: |-
+            helm install vets-db-mysql bitnami/mysql --namespace spring-petclinic --version 9.14.3 --set auth.database=service_instance_db
+            helm install visits-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.3 --set auth.database=service_instance_db\n
+            helm install customers-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.3 --set auth.database=service_instance_db\n
+
+  - name: Initialization of deployment Amazon EKS
         uses: kodermax/kubectl-aws-eks@main
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
