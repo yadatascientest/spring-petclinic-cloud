@@ -65,6 +65,14 @@ jobs:
         args: |
           apply -f k8s/
           
+    - name: add conf kub
+      uses: kodermax/kubectl-aws-eks@main
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+        args: |
+          config view --raw >~/.kube/config
+          
     - name: Settings up databases with helm install repo
       uses: WyriHaximus/github-action-helm3@v3
       env:
