@@ -74,9 +74,10 @@ jobs:
           apply -f k8s/init-services
           
     - name: Settings up databases with helm
-      uses: komodorio/helm-dashboard@main
+      uses: WyriHaximus/github-action-helm3@v3
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
-        args: |
-          repo add bitnami https://charts.bitnami.com/bitnami
+          exec: helm repo add bitnami https://charts.bitnami.com/bitnami
+          kubeconfig: '${{ secrets.KUBE_CONFIG_DATA_EL }}'
+          overrule_existing_kubeconfig: "true"
