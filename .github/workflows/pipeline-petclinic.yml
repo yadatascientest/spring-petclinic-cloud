@@ -74,7 +74,7 @@ jobs:
           apply -f k8s/init-services
           
     - name: Settings up databases with helm
-      uses: hypnoglow/helm-s3@main
+      uses: hypnoglow/helm-s3@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
