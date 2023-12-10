@@ -100,9 +100,6 @@ jobs:
         args: |
           apply -f k8s/init-services
 
-    - name: Deploying the application
-      run : ./scripts/deployToKubernetes.sh
-
     - name: get api 
       uses: kodermax/kubectl-aws-eks@main
       env:
