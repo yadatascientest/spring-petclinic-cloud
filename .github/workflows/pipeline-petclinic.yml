@@ -64,6 +64,16 @@ jobs:
       with:
         args: |
           apply -f k8s/
+          
+    - name: Settings up databases with helm install repo
+      uses: WyriHaximus/github-action-helm3@v3
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+          exec: helm repo add bitnami https://charts.bitnami.com/bitnami && helm repo update && helm install vets-db-mysql bitnami/mysql --namespace spring-petclinic --version 8.8.8 --set auth.database=service_instance_db && helm install visits-db-mysql bitnami/mysql --namespace spring-petclinic  --version 8.8.8 --set auth.database=service_instance_db
+                && helm install customers-db-mysql bitnami/mysql --namespace spring-petclinic  --version 8.8.8 --set auth.database=service_instance_db
+          kubeconfig: '${{ secrets.KUBE_CONFIG_DATA_EL }}'
+          overrule_existing_kubeconfig: "true"
     
     - name: Initialization of services Amazon EKS
       uses: kodermax/kubectl-aws-eks@main
@@ -72,12 +82,14 @@ jobs:
       with:
         args: |
           apply -f k8s/init-services
-          
-    - name: Settings up databases with helm install repo
-      uses: WyriHaximus/github-action-helm3@v3
+
+    - name: Deploying the application
+      run : ./scripts/deployToKubernetes.sh
+
+    - name: get api 
+      uses: kodermax/kubectl-aws-eks@main
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
-          exec: helm repo add bitnami https://charts.bitnami.com/bitnami && helm repo update
-          kubeconfig: '${{ secrets.KUBE_CONFIG_DATA_EL }}'
-          overrule_existing_kubeconfig: "true"
+        args: |
+          get svc -n spring-petclinic api-gateway 
