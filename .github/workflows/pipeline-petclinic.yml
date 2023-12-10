@@ -72,3 +72,11 @@ jobs:
       with:
         args: |
           apply -f k8s/init-services
+          
+    - name: Settings up databases with helm
+      uses: hypnoglow/helm-s3@main
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+        args: |
+          repo add bitnami https://charts.bitnami.com/bitnami
