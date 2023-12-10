@@ -1,6 +1,6 @@
 ## Cluster domain
 ##
-clusterDomain: <DOMAIN>
+clusterDomain: cluster.local
 
 ## MySQL Authentication parameters
 ##
