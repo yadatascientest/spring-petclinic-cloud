@@ -1,5 +1,5 @@
 #!/bin/bash
-
+REPOSITORY_PREFIX_EL=elfiadylclc
 if [ -z "${REPOSITORY_PREFIX_EL}" ]
 then 
     echo "Please set the REPOSITORY_PREFIX_EL"
