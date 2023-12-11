@@ -95,7 +95,8 @@ jobs:
             helm install vets-db-mysql bitnami/mysql --namespace spring-petclinic --version 9.14.4 --set auth.database=service_instance_db &&
             helm install visits-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.4 --set auth.database=service_instance_db
             &&  helm install customers-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.4 --set auth.database=service_instance_db    
-          kubeconfig: '${{ secrets.KUBE_CONFIG_DATA_EL }}'
+          kubeconfig: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
           overrule_existing_kubeconfig: "true"
           
     - name: Initialization of services Amazon EKS
