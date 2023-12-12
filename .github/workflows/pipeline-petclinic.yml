@@ -81,13 +81,21 @@ jobs:
         args: |
           config view --raw >~/.kube/config
 
-    - uses: actions/checkout@v3
     - name: Settings up databases with helm install repo
       uses: WyriHaximus/github-action-helm3@v3
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
-        exec:  helm repo add examples https://helm.github.io/examples && helm install ahoy examples/hello-world
-        kubeconfig: '${{ secrets.KUBE_CONFIG_DATA_EL }}'
-        overrule_existing_kubeconfig: "true"
+          #args: |
+           # repo add bitnami https://charts.bitnami.com/bitnami &&  repo update &&
+            #install vets-db-mysql bitnami/mysql --namespace spring-petclinic --version 9.14.4 --set auth.database=service_instance_db &&
+            #install visits-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.4 --set auth.database=service_instance_db
+            #&&  install customers-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.4 --set auth.database=service_instance_db
+          exec: helm repo add bitnami https://charts.bitnami.com/bitnami && helm repo update &&
+            helm upgrade vets-db-mysql bitnami/mysql --namespace spring-petclinic --version 9.14.4 --set auth.database=service_instance_db &&
+            helm upgrade visits-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.4 --set auth.database=service_instance_db
+            &&  helm upgrade customers-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.4 --set auth.database=service_instance_db    
+          kubeconfig: ${{ secrets.KUBE_CONFIG_DATA_EL }}
               
     - name: Initialization of services Amazon EKS
       uses: kodermax/kubectl-aws-eks@main
