@@ -41,8 +41,12 @@ spec:
           limits:
             memory: 1Gi
           requests:
-            cpu: 2000m
+            cpu: 200m
             memory: 1Gi
+      tolerations:
+        - key: "key"
+          operator: "Exists"
+          effect: "NoSchedule"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: kubernetes
