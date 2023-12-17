@@ -50,4 +50,8 @@ spec:
         ports:
         - containerPort: 8080
       restartPolicy: Always
+      tolerations:
+        - key: "key"
+          operator: "Exists"
+          effect: "NoSchedule"
 status: {}
