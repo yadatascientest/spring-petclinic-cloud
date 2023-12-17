@@ -42,10 +42,6 @@ spec:
           requests:
             cpu: 200m
             memory: 1Gi
-      tolerations:
-        - key: "node.kubernetes.io/memory-pressure"
-          operator: "Exists"
-          effect: "NoSchedule"
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: kubernetes
@@ -64,4 +60,8 @@ spec:
         - containerPort: 8080
         resources: {}
       restartPolicy: Always
+      tolerations:
+        - key: "node.kubernetes.io/memory-pressure"
+          operator: "Exists"
+          effect: "NoSchedule"
 status: {}
