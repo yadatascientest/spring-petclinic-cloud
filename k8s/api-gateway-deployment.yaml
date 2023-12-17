@@ -51,7 +51,7 @@ spec:
         - containerPort: 8080
       restartPolicy: Always
       tolerations:
-        - key: "key"
+        - key: "node.kubernetes.io/memory-pressure"
           operator: "Exists"
           effect: "NoSchedule"
 status: {}
