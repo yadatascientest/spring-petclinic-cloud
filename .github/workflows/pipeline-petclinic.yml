@@ -65,6 +65,7 @@ jobs:
       #  args: |
        #   create secret generic wavefront -n spring-petclinic --from-literal=wavefront-url=https://wavefront.surf --from-literal=wavefront-api-token=7380ef8d-a2ce-40a7-85b8-70d9d3fab32d
 
+
     - name: Initialization of deployment Amazon EKS
       uses: kodermax/kubectl-aws-eks@main
       env:
