@@ -88,7 +88,7 @@ jobs:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
         args: |
-          apply -f https://k8s.io/examples/application/mysql/mysql-configmap.yaml
+          apply -f https://k8s.io/examples/application/mysql/mysql-configmap.yaml -n spring-petclinic
           
     - name: test 2
       uses: kodermax/kubectl-aws-eks@main
@@ -96,7 +96,7 @@ jobs:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
         args: |
-          apply -f https://k8s.io/examples/application/mysql/mysql-services.yaml
+          apply -f https://k8s.io/examples/application/mysql/mysql-services.yaml -n spring-petclinic
           
     - name: test 3
       uses: kodermax/kubectl-aws-eks@main
@@ -104,7 +104,7 @@ jobs:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
         args: |
-          apply -f https://k8s.io/examples/application/mysql/mysql-statefulset.yaml
+          apply -f https://k8s.io/examples/application/mysql/mysql-statefulset.yaml -n spring-petclinic
                    
     - name: Settings up databases with helm install repo
       uses: kodermax/kubectl-aws-eks@main
