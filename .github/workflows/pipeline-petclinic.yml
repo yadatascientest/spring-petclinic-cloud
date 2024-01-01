@@ -81,7 +81,31 @@ jobs:
       with:
         args: |
           config view --raw >~/.kube/config
-                        
+
+    - name: test 1
+      uses: kodermax/kubectl-aws-eks@main
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+        args: |
+          apply -f https://k8s.io/examples/application/mysql/mysql-configmap.yaml
+          
+    - name: test 2
+      uses: kodermax/kubectl-aws-eks@main
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+        args: |
+          apply -f https://k8s.io/examples/application/mysql/mysql-services.yaml
+          
+    - name: test 3
+      uses: kodermax/kubectl-aws-eks@main
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+        args: |
+          apply -f https://k8s.io/examples/application/mysql/mysql-statefulset.yaml
+                   
     - name: Settings up databases with helm install repo
       uses: kodermax/kubectl-aws-eks@main
       env:
