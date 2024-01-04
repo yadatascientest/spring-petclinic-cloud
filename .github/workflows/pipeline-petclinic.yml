@@ -82,30 +82,17 @@ jobs:
         args: |
           config view --raw >~/.kube/config
 
-    - name: test 1
-      uses: kodermax/kubectl-aws-eks@main
+    - name: Settings up databases with helm install repo
+      uses: WyriHaximus/github-action-helm3@v3
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
-        args: |
-          apply -f https://k8s.io/examples/application/mysql/mysql-configmap.yaml -n spring-petclinic
-          
-    - name: test 2
-      uses: kodermax/kubectl-aws-eks@main
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
-      with:
-        args: |
-          apply -f https://k8s.io/examples/application/mysql/mysql-services.yaml -n spring-petclinic
-          
-    - name: test 3
-      uses: kodermax/kubectl-aws-eks@main
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
-      with:
-        args: |
-          apply -f https://k8s.io/examples/application/mysql/mysql-statefulset.yaml -n spring-petclinic
-                   
+          args: |
+            repo add bitnami https://charts.bitnami.com/bitnami &&  repo update &&
+            install vets-db-mysql bitnami/mysql --namespace spring-petclinic --version 9.14.4 --set auth.database=service_instance_db &&
+            install visits-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.4 --set auth.database=service_instance_db
+            &&  install customers-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.4 --set auth.database=service_instance_db
+             
     - name: Settings up databases with helm install repo
       uses: kodermax/kubectl-aws-eks@main
       env:
