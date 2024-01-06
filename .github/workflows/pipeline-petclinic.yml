@@ -88,13 +88,13 @@ jobs:
         args: |
           apply -f k8s/init-namespace/
 
-    - name: Delete all deployment  of namespace EKS
+    - name: Deletion des secrets Amazon EKS
       uses: kodermax/kubectl-aws-eks@main
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
         args: |
-          delete deployment --all --namespace=default
+          delete secret generic wavefront --ignore-not-found=true -n spring-petclinic 
 
     - name: Creation des secrets Amazon EKS
       uses: kodermax/kubectl-aws-eks@main
