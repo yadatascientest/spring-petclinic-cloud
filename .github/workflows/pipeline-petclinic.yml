@@ -56,15 +56,25 @@ jobs:
         args: |
           apply -f k8s/init-namespace/
 
-    # il faut le faire uen seule fois pet-être pas dans un pipline ou alors vérifier l'existance avant
-    #- name: Creation des secrets Amazon EKS
-     # uses: kodermax/kubectl-aws-eks@main
-      #env:
-       #  KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
-      #with:
-      #  args: |
-       #   create secret generic wavefront -n spring-petclinic --from-literal=wavefront-url=https://wavefront.surf --from-literal=wavefront-api-token=7380ef8d-a2ce-40a7-85b8-70d9d3fab32d
+    - name: Delete all deployment  of namespace EKS
+      uses: kodermax/kubectl-aws-eks@main
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+        args: |
+          delete deployment --all --namespace=default &&
+          delete deploy customers-service -n spring-petclinic &&
+          delete deploy vets-service -n spring-petclinic &&
+          delete deploy visits-service -n spring-petclinic &&
+          delete deploy wavefront-proxy-n spring-petclinic
 
+    - name: Creation des secrets Amazon EKS
+      uses: kodermax/kubectl-aws-eks@main
+      env:
+         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+        args: |
+          create secret generic wavefront -n spring-petclinic --from-literal=wavefront-url=https://wavefront.surf --from-literal=wavefront-api-token=7380ef8d-a2ce-40a7-85b8-70d9d3fab32d
 
     - name: Initialization of deployment Amazon EKS
       uses: kodermax/kubectl-aws-eks@main
@@ -89,25 +99,9 @@ jobs:
       with:
           args: |
             repo add bitnami https://charts.bitnami.com/bitnami &&  repo update &&
-            install vets-db-mysql bitnami/mysql --namespace spring-petclinic --version 9.14.4 --set auth.database=service_instance_db &&
-            install visits-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.4 --set auth.database=service_instance_db
-            &&  install customers-db-mysql bitnami/mysql --namespace spring-petclinic  --version 9.14.4 --set auth.database=service_instance_db
-             
-    - name: Settings up databases with helm install repo
-      uses: kodermax/kubectl-aws-eks@main
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
-      with:
-        args: |
-          apply -f k8s/mysql-pv.yaml
-
-    - name: Settings up databases with helm install repo step 2
-      uses: kodermax/kubectl-aws-eks@main
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
-      with:
-        args: |
-          apply -f k8s/mysql-deployment.yaml
+            upgrade --install  vets-db-mysql bitnami/mysql --namespace spring-petclinic  --set primary.persistence.enabled=false --set secondary.persistence.enabled=false --set auth.database=service_instance_db &&
+            upgrade --install  visits-db-mysql bitnami/mysql --namespace spring-petclinic  --set primary.persistence.enabled=false --set secondary.persistence.enabled=false --set auth.database=service_instance_db &&
+            upgrade --install  customers-db-mysql bitnami/mysql --namespace spring-petclinic  --set primary.persistence.enabled=false --set secondary.persistence.enabled=false --set auth.database=service_instance_db  
           
     - name: Initialization of services Amazon EKS 
       uses: kodermax/kubectl-aws-eks@main
