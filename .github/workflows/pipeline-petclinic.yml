@@ -62,11 +62,7 @@ jobs:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
         args: |
-          delete deployment --all --namespace=default &&
-          delete deploy customers-service -n spring-petclinic &&
-          delete deploy vets-service -n spring-petclinic &&
-          delete deploy visits-service -n spring-petclinic &&
-          delete deploy wavefront-proxy-n spring-petclinic
+          delete deployment --all --namespace=default
 
     - name: Creation des secrets Amazon EKS
       uses: kodermax/kubectl-aws-eks@main
