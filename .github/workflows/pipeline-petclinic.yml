@@ -40,13 +40,45 @@ jobs:
         pwd & ls
         cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX_EL}'"#${REPOSITORY_PREFIX_EL}#g" | > deploy.yaml
 
-    - name: clean namespace 
+    - name: clean namespace 1/5
       uses: kodermax/kubectl-aws-eks@main
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
         args: |
           delete --all pods --namespace=spring-petclinic
+
+    - name: clean namespace 2/5
+      uses: kodermax/kubectl-aws-eks@main
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+        args: |
+          delete deploy customers-service -n spring-petclinic
+
+    - name: clean namespace 3/5
+      uses: kodermax/kubectl-aws-eks@main
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+        args: |
+          delete deploy vets-service -n spring-petclinic
+
+    - name: clean namespace 4/5
+      uses: kodermax/kubectl-aws-eks@main
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+        args: |
+          delete deploy visits-service -n spring-petclinic
+
+    - name: clean namespace 5/5
+      uses: kodermax/kubectl-aws-eks@main
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+        args: |
+          delete deploy wavefront-proxy-n spring-petclinic
           
     - name: Initialization of namespace EKS
       uses: kodermax/kubectl-aws-eks@main
@@ -88,17 +120,47 @@ jobs:
         args: |
           config view --raw >~/.kube/config
 
-    - name: Settings up databases with helm install repo
+
+    - name: Settings up databases with helm install repo 1/5
       uses: WyriHaximus/github-action-helm3@v3
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
           args: |
-            repo add bitnami https://charts.bitnami.com/bitnami &&  repo update &&
-            upgrade --install  vets-db-mysql bitnami/mysql --namespace spring-petclinic  --set primary.persistence.enabled=false --set secondary.persistence.enabled=false --set auth.database=service_instance_db &&
-            upgrade --install  visits-db-mysql bitnami/mysql --namespace spring-petclinic  --set primary.persistence.enabled=false --set secondary.persistence.enabled=false --set auth.database=service_instance_db &&
-            upgrade --install  customers-db-mysql bitnami/mysql --namespace spring-petclinic  --set primary.persistence.enabled=false --set secondary.persistence.enabled=false --set auth.database=service_instance_db  
-          
+            repo add bitnami https://charts.bitnami.com/bitnami 
+
+    - name: Settings up databases with helm install repo 2/5
+      uses: WyriHaximus/github-action-helm3@v3
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+          args: |
+            repo update 
+
+    - name: Settings up databases with helm install repo 3/5
+      uses: WyriHaximus/github-action-helm3@v3
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+          args: |
+            upgrade --install  vets-db-mysql bitnami/mysql --namespace spring-petclinic  --set primary.persistence.enabled=false --set secondary.persistence.enabled=false --set auth.database=service_instance_db
+
+    - name: Settings up databases with helm install repo 4/5
+      uses: WyriHaximus/github-action-helm3@v3
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+          args: |
+            upgrade --install  visits-db-mysql bitnami/mysql --namespace spring-petclinic  --set primary.persistence.enabled=false --set secondary.persistence.enabled=false --set auth.database=service_instance_db
+
+    - name: Settings up databases with helm install repo 5/5
+      uses: WyriHaximus/github-action-helm3@v3
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+          args: |
+            upgrade --install  customers-db-mysql bitnami/mysql --namespace spring-petclinic  --set primary.persistence.enabled=false --set secondary.persistence.enabled=false --set auth.database=service_instance_db
+                     
     - name: Initialization of services Amazon EKS 
       uses: kodermax/kubectl-aws-eks@main
       env:
