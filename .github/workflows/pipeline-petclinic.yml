@@ -46,7 +46,7 @@ jobs:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
         args: |
-          delete --all pods --namespace=spring-petclinic
+          delete --all pods --ignore-not-found=true --namespace=spring-petclinic
 
     - name: clean namespace 2/5
       uses: kodermax/kubectl-aws-eks@main
@@ -54,7 +54,7 @@ jobs:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
         args: |
-          delete deploy customers-service -n spring-petclinic
+          delete deploy customers-service --ignore-not-found=true -n spring-petclinic
 
     - name: clean namespace 3/5
       uses: kodermax/kubectl-aws-eks@main
@@ -62,7 +62,7 @@ jobs:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
         args: |
-          delete deploy vets-service -n spring-petclinic
+          delete deploy vets-service --ignore-not-found=true -n spring-petclinic
 
     - name: clean namespace 4/5
       uses: kodermax/kubectl-aws-eks@main
@@ -70,7 +70,7 @@ jobs:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
         args: |
-          delete deploy visits-service -n spring-petclinic
+          delete deploy visits-service --ignore-not-found=true -n spring-petclinic
 
     - name: clean namespace 5/5
       uses: kodermax/kubectl-aws-eks@main
@@ -78,7 +78,7 @@ jobs:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
       with:
         args: |
-          delete deploy wavefront-proxy-n spring-petclinic
+          delete deploy wavefront-proxy --ignore-not-found=true -n spring-petclinic
           
     - name: Initialization of namespace EKS
       uses: kodermax/kubectl-aws-eks@main
