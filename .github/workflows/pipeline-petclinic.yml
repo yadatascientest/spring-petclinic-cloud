@@ -14,12 +14,12 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: Generate docker images
-      run : mvn spring-boot:build-image --file pom.xml -X -Pk8s -DREPOSITORY_PREFIX=elfiadylclc
+      run : mvn spring-boot:build-image --file pom.xml -X -Pk8s -DREPOSITORY_PREFIX=adjouder
     - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME_EL }}
-        password: ${{ secrets.DOCKER_PASSWORD_EL }}
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
     - name: push docker images
       run : ./scripts/pushImages.sh
 
@@ -38,8 +38,8 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_2 }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_2 }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
         aws-region: eu-west-3
 
     - name: Login to Amazon ECR
@@ -49,12 +49,12 @@ jobs:
     - name: Update kube config
       run: |
         pwd & ls
-        cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX_EL}'"#${REPOSITORY_PREFIX_EL}#g" | > deploy.yaml
+        cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX}'"#${REPOSITORY_PREFIX}#g" | > deploy.yaml
 
     - name: clean namespace 1/5
       uses: kodermax/kubectl-aws-eks@main
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         args: |
           delete --all pods --ignore-not-found=true --namespace=spring-petclinic
@@ -62,7 +62,7 @@ jobs:
     - name: clean namespace 2/5
       uses: kodermax/kubectl-aws-eks@main
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         args: |
           delete deploy customers-service --ignore-not-found=true -n spring-petclinic
@@ -70,7 +70,7 @@ jobs:
     - name: clean namespace 3/5
       uses: kodermax/kubectl-aws-eks@main
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         args: |
           delete deploy vets-service --ignore-not-found=true -n spring-petclinic
@@ -78,7 +78,7 @@ jobs:
     - name: clean namespace 4/5
       uses: kodermax/kubectl-aws-eks@main
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         args: |
           delete deploy visits-service --ignore-not-found=true -n spring-petclinic
@@ -86,7 +86,7 @@ jobs:
     - name: clean namespace 5/5
       uses: kodermax/kubectl-aws-eks@main
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         args: |
           delete deploy wavefront-proxy --ignore-not-found=true -n spring-petclinic
@@ -94,7 +94,7 @@ jobs:
     - name: Deletion des secrets Amazon EKS
       uses: kodermax/kubectl-aws-eks@main
       env:
-         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         args: |
           delete secret generic wavefront --ignore-not-found=true -n spring-petclinic 
@@ -114,8 +114,8 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_2 }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_2 }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-west-3
 
     - name: Login to Amazon ECR
@@ -125,12 +125,12 @@ jobs:
     - name: Update kube config
       run: |
         pwd & ls
-        cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX_EL}'"#${REPOSITORY_PREFIX_EL}#g" | > deploy.yaml
+        cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX}'"#${REPOSITORY_PREFIX}#g" | > deploy.yaml
         
     - name: Initialization of namespace EKS
       uses: kodermax/kubectl-aws-eks@main
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         args: |
           apply -f k8s/init-namespace/
@@ -149,8 +149,8 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_2 }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_2 }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-west-3
 
     - name: Login to Amazon ECR
@@ -160,12 +160,12 @@ jobs:
     - name: Update kube config
       run: |
         pwd & ls
-        cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX_EL}'"#${REPOSITORY_PREFIX_EL}#g" | > deploy.yaml
+        cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX}'"#${REPOSITORY_PREFIX}#g" | > deploy.yaml
 
     - name: Creation des secrets Amazon EKS
       uses: kodermax/kubectl-aws-eks@main
       env:
-         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         args: |
           create secret generic wavefront -n spring-petclinic --from-literal=wavefront-url=https://wavefront.surf --from-literal=wavefront-api-token=7380ef8d-a2ce-40a7-85b8-70d9d3fab32d
@@ -173,7 +173,7 @@ jobs:
     - name: Initialization of deployment Amazon EKS
       uses: kodermax/kubectl-aws-eks@main
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         args: |
           apply -f k8s/
@@ -181,7 +181,7 @@ jobs:
     - name: add conf kub
       uses: kodermax/kubectl-aws-eks@main
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         args: |
           config view --raw >~/.kube/config
@@ -190,7 +190,7 @@ jobs:
     - name: Settings up databases with helm install repo 1/5
       uses: WyriHaximus/github-action-helm3@v3
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
           args: |
             repo add bitnami https://charts.bitnami.com/bitnami 
@@ -198,7 +198,7 @@ jobs:
     - name: Settings up databases with helm install repo 2/5
       uses: WyriHaximus/github-action-helm3@v3
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
           args: |
             repo update 
@@ -206,7 +206,7 @@ jobs:
     - name: Settings up databases with helm install repo 3/5
       uses: WyriHaximus/github-action-helm3@v3
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
           args: |
             upgrade --install  vets-db-mysql bitnami/mysql --namespace spring-petclinic  --set primary.persistence.enabled=false --set secondary.persistence.enabled=false --set auth.database=service_instance_db
@@ -214,7 +214,7 @@ jobs:
     - name: Settings up databases with helm install repo 4/5
       uses: WyriHaximus/github-action-helm3@v3
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
           args: |
             upgrade --install  visits-db-mysql bitnami/mysql --namespace spring-petclinic  --set primary.persistence.enabled=false --set secondary.persistence.enabled=false --set auth.database=service_instance_db
@@ -222,7 +222,7 @@ jobs:
     - name: Settings up databases with helm install repo 5/5
       uses: WyriHaximus/github-action-helm3@v3
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
           args: |
             upgrade --install  customers-db-mysql bitnami/mysql --namespace spring-petclinic  --set primary.persistence.enabled=false --set secondary.persistence.enabled=false --set auth.database=service_instance_db
@@ -230,7 +230,7 @@ jobs:
     - name: Initialization of services Amazon EKS 
       uses: kodermax/kubectl-aws-eks@main
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         args: |
           apply -f k8s/init-services
@@ -249,8 +249,8 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_2 }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_2 }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-west-3
 
     - name: Login to Amazon ECR
@@ -260,12 +260,12 @@ jobs:
     - name: Update kube config
       run: |
         pwd & ls
-        cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX_EL}'"#${REPOSITORY_PREFIX_EL}#g" | > deploy.yaml
+        cat ./k8s/*.yaml | sed 's#\${REPOSITORY_PREFIX}'"#${REPOSITORY_PREFIX}#g" | > deploy.yaml
 
     - name: get api 
       uses: kodermax/kubectl-aws-eks@main
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         args: |
           get svc -n spring-petclinic api-gateway 
