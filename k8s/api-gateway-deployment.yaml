@@ -18,7 +18,7 @@ spec:
         app: api-gateway
     spec:
       containers:
-      - image: elfiadylclc/spring-petclinic-cloud-api-gateway:latest
+      - image: adjouder/spring-petclinic-cloud-api-gateway:latest
         name: api-gateway
         imagePullPolicy: Always
         livenessProbe:

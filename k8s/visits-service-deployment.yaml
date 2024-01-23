@@ -18,7 +18,7 @@ spec:
         app: visits-service
     spec:
       containers:
-      - image: elfiadylclc/spring-petclinic-cloud-visits-service:latest
+      - image: adjouder/spring-petclinic-cloud-visits-service:latest
         name: visits-service
         imagePullPolicy: Always
         livenessProbe:
