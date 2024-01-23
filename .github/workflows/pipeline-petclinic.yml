@@ -1,4 +1,4 @@
-name: Petclinic CI
+name: Petclinic deployment pipeline
 on: [push]
 jobs:
   build:
