@@ -1,4 +1,4 @@
-name: Petclinic deployment pipeline
+name: Petclinic deployementPipeline
 on: [push]
 jobs:
   build:
@@ -23,7 +23,7 @@ jobs:
     - name: push docker images
       run : ./scripts/pushImages.sh
 
-  clean:
+  clean-namespace:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -99,8 +99,8 @@ jobs:
         args: |
           delete secret generic wavefront --ignore-not-found=true -n spring-petclinic 
       
-  init_namesapce:
-    needs: clean
+  initialisation-namesapce:
+    needs: clean-namespace
     runs-on: ubuntu-latest
     steps:
      
@@ -135,8 +135,8 @@ jobs:
         args: |
           apply -f k8s/init-namespace/
 
-  deploy:
-    needs: init_namesapce
+  deploy-services:
+    needs: initialisation-namesapce
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2 
