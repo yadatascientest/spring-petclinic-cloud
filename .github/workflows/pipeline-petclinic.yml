@@ -185,7 +185,14 @@ jobs:
       with:
         args: |
           config view --raw >~/.kube/config
-
+                  
+    - name: Initialization of services Amazon EKS 
+      uses: kodermax/kubectl-aws-eks@main
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
+      with:
+        args: |
+          apply -f k8s/init-services
 
     - name: Settings up databases with helm install repo 1/5
       uses: WyriHaximus/github-action-helm3@v3
@@ -226,14 +233,7 @@ jobs:
       with:
           args: |
             upgrade --install  customers-db-mysql bitnami/mysql --namespace spring-petclinic  --set primary.persistence.enabled=false --set secondary.persistence.enabled=false --set auth.database=service_instance_db
-                     
-    - name: Initialization of services Amazon EKS 
-      uses: kodermax/kubectl-aws-eks@main
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_EL }}
-      with:
-        args: |
-          apply -f k8s/init-services
+   
           
   test:
     needs: deploy
