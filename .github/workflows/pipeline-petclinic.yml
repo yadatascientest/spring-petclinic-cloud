@@ -269,4 +269,4 @@ jobs:
       with:
         args: |
           get svc -n spring-petclinic api-gateway 
-  
+ 

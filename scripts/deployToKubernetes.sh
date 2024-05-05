@@ -1,5 +1,5 @@
 #!/bin/bash
-REPOSITORY_PREFIX_EL=adjouder
+REPOSITORY_PREFIX=adjouder
 if [ -z "${REPOSITORY_PREFIX}" ]
 then 
     echo "Please set the REPOSITORY_PREFIX"
