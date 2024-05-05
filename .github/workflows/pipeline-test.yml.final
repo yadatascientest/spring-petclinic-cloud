@@ -60,3 +60,5 @@ jobs:
         with:
           args: |
             apply -f k8s/init-services
+
+
